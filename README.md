@@ -60,11 +60,10 @@ JWT_SECRET=test-only DATABASE_URL=postgresql://localhost/trust_safety pytest -q
 
 ## Not connected yet
 
-- **Gateway:** no routes yet, so the browser cannot reach this service.
-- **Compose and k8s:** not added to `running-buddy-integration`, and the `trust_safety` database does not exist there.
+- **k8s:** Compose runs this service through `running-buddy-integration`, but the k8s manifests do not include it.
 - **`PhoneVerified`:** Identity does not publish it, so no badge is granted automatically.
 - **Identity lock:** `lockAccount` exists in Identity but has no route, so `IDENTITY_LOCK_URL` has nothing to point at. The request body matches that controller.
 - **Event consumers:** nothing binds the three published events. Unrouted events stay in the outbox and are retried, per ADR-0021.
-- **Contracts:** `running-buddy-contracts` still says this service has no contract.
+- **Contracts:** `running-buddy-contracts` still says this service has no contract; the integration repo has the current snapshot.
 - **Review reports:** the review ID is not checked against Reputation.
-- **Broker tests:** the consumer's event handling and the publisher are tested, but not against a running RabbitMQ.
+- **Broker tests:** `pytest` uses fakes for RabbitMQ. The flow was checked once by hand against real RabbitMQ through the gateway.
